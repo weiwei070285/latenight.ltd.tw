@@ -8,7 +8,7 @@ import Layout from "@/components/Layout";
 import { asset } from "@/lib/asset";
 
 const HERO_BG = asset("images/hero-bg.webp");
-const LOOP_VIDEO = asset("videos/leight-nine-loop.mp4");
+const LOOP_VIDEO = asset("leight-nine-loop.mp4");
 const LOOP_POSTER = asset("images/leight-nine-loop-poster.webp");
 
 /** Silent looping video that links to DISCOGRAPHY.
@@ -78,15 +78,16 @@ export default function Home() {
       {/* ── HERO ── */}
       <section
         ref={heroRef}
-        className="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden"
+        className="relative h-[75svh] min-h-[480px] md:h-screen md:min-h-[600px] flex items-center justify-center overflow-hidden bg-black"
       >
         {/* Background image */}
         <div className="absolute inset-0">
           <img
             src={HERO_BG}
             alt=""
-            className="w-full h-full object-cover image-fade-in"
-            style={{ transform: "scale(1.05)" }}
+            /* Phones: show the whole square logo, enlarged so the artwork (middle ~50%) fills the width.
+               Desktop: fill the screen as before. */
+            className="w-full h-full object-contain scale-[1.8] md:object-cover md:scale-[1.05] image-fade-in"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.10_0.005_285/0.5)] via-[oklch(0.10_0.005_285/0.3)] to-[oklch(0.10_0.005_285/0.9)]" />
         </div>

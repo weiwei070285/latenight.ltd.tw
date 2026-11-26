@@ -79,16 +79,16 @@ function todayTaipei() {
 
 function SectionTitle({ zh, en }: { zh: string; en: string }) {
   return (
-    <h2 className="border-b border-white/10 pb-6 text-3xl text-white sm:text-4xl">
-      <span className="font-semibold tracking-[0.12em]">{zh}</span>{" "}
-      <span className="whitespace-nowrap font-['ButlerCustom'] tracking-[0.12em]">{en}</span>
+    <h2 className="border-b border-white/10 pb-5 text-2xl text-white">
+      <span className="font-semibold tracking-[0.1em]">{zh}</span>{" "}
+      <span className="whitespace-nowrap font-['ButlerCustom'] tracking-[0.1em]">{en}</span>
     </h2>
   );
 }
 
 function GroupLabel({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="mb-2 font-['ButlerCustom'] text-sm uppercase tracking-[0.35em] text-[oklch(0.70_0.02_280)] sm:text-base">
+    <h3 className="mb-1 font-['ButlerCustom'] text-xs uppercase tracking-[0.35em] text-[oklch(0.70_0.02_280)]">
       {children}
     </h3>
   );
@@ -96,14 +96,14 @@ function GroupLabel({ children }: { children: React.ReactNode }) {
 
 function ShowRow({ show }: { show: Show }) {
   return (
-    <li className="grid grid-cols-1 gap-1 border-b border-white/10 py-6 sm:grid-cols-[180px_1fr] sm:gap-8 lg:grid-cols-[240px_1fr]">
-      <span className="font-['ButlerCustom'] text-base tracking-[0.06em] text-white/50 sm:text-lg">
+    <li className="grid grid-cols-1 gap-1 border-b border-white/10 py-5 sm:grid-cols-[160px_1fr] sm:gap-8 lg:grid-cols-[200px_1fr]">
+      <span className="font-['ButlerCustom'] text-sm tracking-[0.08em] text-white/50">
         {show.date}
       </span>
       <div>
-        <p className="font-['ButlerCustom'] text-lg text-white sm:text-xl">{show.place}</p>
+        <p className="font-['ButlerCustom'] text-lg text-white">{show.place}</p>
         {show.note && (
-          <p className="mt-2 font-['ButlerCustom'] text-sm tracking-[0.02em] text-white/40 sm:text-base">
+          <p className="mt-1 font-['ButlerCustom'] text-xs tracking-[0.08em] text-white/40">
             {show.note}
           </p>
         )}
@@ -137,7 +137,7 @@ export default function Tour() {
       </section>
 
       <section className="page-section">
-        <div className="mx-auto max-w-[1400px] space-y-24 px-6 lg:px-10">
+        <div className="mx-auto max-w-[1400px] space-y-20 px-6 lg:px-10">
           {/* 即將演出 Upcoming */}
           <section>
             <SectionTitle zh="即將演出" en="Upcoming" />
@@ -148,7 +148,7 @@ export default function Tour() {
                 ))}
               </ul>
             ) : (
-              <p className="mt-8 font-['ButlerCustom'] text-base text-white/50 sm:text-lg">
+              <p className="mt-6 font-['ButlerCustom'] text-sm text-white/50">
                 目前沒有已公布的演出，追蹤 Bandsintown 搶先收到最新場次通知。
               </p>
             )}
@@ -156,17 +156,17 @@ export default function Tour() {
               href={BANDSINTOWN_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-8 inline-flex items-center gap-2 border border-white/30 px-6 py-3 font-['ButlerCustom'] text-sm tracking-[0.15em] text-white transition-colors duration-300 hover:border-white hover:bg-white hover:text-black"
+              className="mt-6 inline-flex items-center gap-2 border border-white/30 px-5 py-2.5 font-['ButlerCustom'] text-xs tracking-[0.16em] text-white transition-colors duration-300 hover:border-white hover:bg-white hover:text-black"
             >
               追蹤 Bandsintown
-              <ArrowUpRight className="h-4 w-4" />
+              <ArrowUpRight className="h-3.5 w-3.5" />
             </a>
           </section>
 
           {/* 過去演出場次 Past Shows */}
           <section>
             <SectionTitle zh="過去演出場次" en="Past Shows" />
-            <div className="mt-14 space-y-16">
+            <div className="mt-10 space-y-12">
               {past.map((group) => (
                 <div key={group.title}>
                   <GroupLabel>{group.title}</GroupLabel>
