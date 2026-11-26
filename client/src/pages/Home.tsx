@@ -7,7 +7,7 @@ import { Link } from "wouter";
 import Layout from "@/components/Layout";
 import { asset } from "@/lib/asset";
 
-const HERO_BG = asset("images/hero-bg.webp");
+const HERO_BG = asset("images/hero-logo-landscape.webp");
 const LOOP_VIDEO = asset("leight-nine-loop.mp4");
 const LOOP_POSTER = asset("images/leight-nine-loop-poster.webp");
 
@@ -85,9 +85,10 @@ export default function Home() {
           <img
             src={HERO_BG}
             alt=""
-            /* Phones: show the whole square logo, enlarged so the artwork (middle ~50%) fills the width.
-               Desktop: fill the screen as before. */
-            className="w-full h-full object-contain scale-[1.8] md:object-cover md:scale-[1.05] image-fade-in"
+            /* Landscape 16:9 logo on black; the artwork is the middle ~30% of the width.
+               Phones: show the whole image, enlarged so the artwork fills most of the width.
+               Desktop: fill the screen. */
+            className="w-full h-full object-contain scale-[3] md:object-cover md:scale-100 image-fade-in"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-[oklch(0.10_0.005_285/0.5)] via-[oklch(0.10_0.005_285/0.3)] to-[oklch(0.10_0.005_285/0.9)]" />
         </div>
@@ -102,6 +103,9 @@ export default function Home() {
           }}
         />
       </section>
+
+      {/* ── LEIGHT NINE video → Discography ── */}
+      <DiscographyVideo />
 
       {/* Footer Info */}
       <section className="page-section py-12 border-t border-white/5">
@@ -120,8 +124,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── LEIGHT NINE video → Discography ── */}
-      <DiscographyVideo />
     </Layout>
   );
 }
