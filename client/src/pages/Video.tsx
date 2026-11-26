@@ -5,6 +5,24 @@ import { useState } from "react";
 import Layout from "@/components/Layout";
 import { Play, X } from "lucide-react";
 
+/** YouTube thumbnail with fallback: maxres (HD) is missing on some videos,
+ *  where YouTube returns a 120x90 gray placeholder — step down to sd, then hq (always exists). */
+const THUMB_SIZES = ["maxresdefault", "sddefault", "hqdefault"];
+function nextThumb(img: HTMLImageElement) {
+  const m = img.src.match(/\/vi\/([^/]+)\/(\w+)\.jpg/);
+  if (!m) return;
+  const i = THUMB_SIZES.indexOf(m[2]);
+  if (i >= 0 && i < THUMB_SIZES.length - 1) {
+    img.src = `https://i.ytimg.com/vi/${m[1]}/${THUMB_SIZES[i + 1]}.jpg`;
+  }
+}
+const thumbHandlers = {
+  onLoad: (e: React.SyntheticEvent<HTMLImageElement>) => {
+    if (e.currentTarget.naturalWidth <= 120) nextThumb(e.currentTarget);
+  },
+  onError: (e: React.SyntheticEvent<HTMLImageElement>) => nextThumb(e.currentTarget),
+};
+
 
 
 const videos: any[] = [
@@ -13,7 +31,7 @@ const videos: any[] = [
     title: "Tokyo Burst & Electric Town (Live, 2026)",
     type: "LIVE",
     year: "2026",
-    thumb: "https://img.youtube.com/vi/D3vUK1pZYzw/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/D3vUK1pZYzw/maxresdefault.jpg",
     sortDate: 20261017,
   },
   {
@@ -21,7 +39,7 @@ const videos: any[] = [
     title: "Safe House (Live, 2026)",
     type: "LIVE",
     year: "2026",
-    thumb: "https://img.youtube.com/vi/gz6wFqm4dBk/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/gz6wFqm4dBk/maxresdefault.jpg",
     sortDate: 20260917,
   },
   {
@@ -29,7 +47,7 @@ const videos: any[] = [
     title: "Area Night (Live, 2026)",
     type: "LIVE",
     year: "2026",
-    thumb: "https://img.youtube.com/vi/9BPcAKUNu6Q/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/9BPcAKUNu6Q/maxresdefault.jpg",
     sortDate: 20260717,
   },
   {
@@ -37,7 +55,7 @@ const videos: any[] = [
     title: "Dead Line (Visualizer, 2026)",
     type: "Visualizer",
     year: "2026",
-    thumb: "https://img.youtube.com/vi/FZjzI5ZERXQ/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/FZjzI5ZERXQ/maxresdefault.jpg",
     sortDate: 202600,
   },
   {
@@ -45,7 +63,7 @@ const videos: any[] = [
     title: "Electric Town (Live, Instrumental, 2026)",
     type: "LIVE",
     year: "2026",
-    thumb: "https://img.youtube.com/vi/rcQkVTj452c/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/rcQkVTj452c/maxresdefault.jpg",
     sortDate: 202600,
   },
   {
@@ -53,7 +71,7 @@ const videos: any[] = [
     title: "Walden (Live, 2026)",
     type: "LIVE",
     year: "2026",
-    thumb: "https://img.youtube.com/vi/Dk1u-7eD7aw/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/Dk1u-7eD7aw/maxresdefault.jpg",
     sortDate: 202600,
   },
   {
@@ -61,7 +79,7 @@ const videos: any[] = [
     title: "WAKEN (Visualizer, 2025)",
     type: "Visualizer",
     year: "2025",
-    thumb: "https://img.youtube.com/vi/8n-vGaIIOF0/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/8n-vGaIIOF0/maxresdefault.jpg",
     sortDate: 202500,
   },
   {
@@ -69,7 +87,7 @@ const videos: any[] = [
     title: "Electric Town (Live, 2025)",
     type: "LIVE",
     year: "2025",
-    thumb: "https://img.youtube.com/vi/eLqGCM3lsbc/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/eLqGCM3lsbc/maxresdefault.jpg",
     sortDate: 202500,
   },
   {
@@ -77,7 +95,7 @@ const videos: any[] = [
     title: "NAIHE (Live, 2025)",
     type: "LIVE",
     year: "2025",
-    thumb: "https://img.youtube.com/vi/Q9KODWFOeTE/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/Q9KODWFOeTE/maxresdefault.jpg",
     sortDate: 202500,
   },
   {
@@ -85,7 +103,7 @@ const videos: any[] = [
     title: "Safe House (Live, 2025)",
     type: "LIVE",
     year: "2025",
-    thumb: "https://img.youtube.com/vi/54E2f_VBs-U/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/54E2f_VBs-U/maxresdefault.jpg",
     sortDate: 202500,
   },
   {
@@ -93,7 +111,7 @@ const videos: any[] = [
     title: "Buddy (Live, Instrumental, 2025)",
     type: "LIVE",
     year: "2025",
-    thumb: "https://img.youtube.com/vi/ev9U6ru7mmg/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/ev9U6ru7mmg/maxresdefault.jpg",
     sortDate: 202500,
   },
   {
@@ -101,7 +119,7 @@ const videos: any[] = [
     title: "Tokyo Burst (Live, 2025)",
     type: "LIVE",
     year: "2025",
-    thumb: "https://img.youtube.com/vi/4AnH15AYPtw/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/4AnH15AYPtw/maxresdefault.jpg",
     sortDate: 202500,
   },
   {
@@ -109,7 +127,7 @@ const videos: any[] = [
     title: "Don't Say Goodnight Girl (Visualizer, 2024)",
     type: "Visualizer",
     year: "2024",
-    thumb: "https://img.youtube.com/vi/0o2F8F5Ftu8/maxresdefault.jpg",
+    thumb: "https://i.ytimg.com/vi/0o2F8F5Ftu8/maxresdefault.jpg",
     sortDate: 202400,
   },
 ];
@@ -149,6 +167,7 @@ export default function Video() {
               >
                 <img
                   src={filtered[0].thumb}
+                  {...thumbHandlers}
                   alt={filtered[0].title}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 image-fade-in"
                 />
@@ -182,6 +201,7 @@ export default function Video() {
                 <div className="relative aspect-video overflow-hidden mb-3">
                   <img
                     src={video.thumb}
+                  {...thumbHandlers}
                     alt={video.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 image-fade-in"
                   />
