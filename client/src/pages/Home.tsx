@@ -8,6 +8,61 @@ import Layout from "@/components/Layout";
 import { asset } from "@/lib/asset";
 
 const HERO_BG = asset("images/hero-bg.webp");
+const LOOP_VIDEO = asset("videos/leight-nine-loop.mp4");
+const LOOP_POSTER = asset("images/leight-nine-loop-poster.webp");
+
+/** Silent looping video that links to DISCOGRAPHY.
+ *  Desktop: a small "LEIGHT NINE →" tag follows the cursor while hovering.
+ *  Touch screens: the tag sits fixed in the bottom-left corner. */
+function DiscographyVideo() {
+  const [cursor, setCursor] = useState<{ x: number; y: number } | null>(null);
+  const reduceMotion =
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+  return (
+    <section className="border-t border-white/5">
+      <Link
+        href="/discography"
+        aria-label="LEIGHT NINE — Discography"
+        className="group relative block aspect-video max-h-[85vh] w-full overflow-hidden bg-black md:cursor-none"
+        onMouseMove={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          setCursor({ x: e.clientX - r.left, y: e.clientY - r.top });
+        }}
+        onMouseLeave={() => setCursor(null)}
+      >
+        <video
+          className="h-full w-full object-cover"
+          src={LOOP_VIDEO}
+          poster={LOOP_POSTER}
+          autoPlay={!reduceMotion}
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-hidden="true"
+        />
+        <div className="absolute inset-0 bg-black/25 transition-colors duration-500 group-hover:bg-black/0" />
+
+        {/* Touch screens / no hover: fixed label */}
+        <span className="pointer-events-none absolute bottom-5 left-6 font-['ButlerCustom'] text-xs tracking-[0.35em] text-white/80 md:hidden">
+          LEIGHT NINE →
+        </span>
+
+        {/* Desktop: label follows the cursor */}
+        {cursor && (
+          <span
+            className="pointer-events-none absolute hidden whitespace-nowrap border border-white/40 bg-black/40 px-3 py-1.5 font-['ButlerCustom'] text-xs tracking-[0.3em] text-white backdrop-blur-sm md:block"
+            style={{ left: cursor.x, top: cursor.y, transform: "translate(-50%, -50%)" }}
+          >
+            LEIGHT NINE →
+          </span>
+        )}
+      </Link>
+    </section>
+  );
+}
 
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -64,6 +119,8 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── LEIGHT NINE video → Discography ── */}
+      <DiscographyVideo />
     </Layout>
   );
 }
