@@ -51,12 +51,9 @@ const projects: any[] = [
     id: 9,
     title: "2026 浮現祭 視訊執行",
     category: "Visual Media",
+    cover: asset("images/project-emerge-2026-misio-03.webp"),
     images: [
-      asset("images/project-emerge-2026-misio-01.webp"),
-      asset("images/project-emerge-2026-misio-02.webp"),
-      asset("images/project-emerge-2026-misio-03.webp"),
-      asset("images/project-emerge-2026-misio-04.webp"),
-      asset("images/project-emerge-2026-misio-05.webp"),
+      asset("images/project-emerge-2026-01.webp"),
       asset("images/project-emerge-2026-02.webp"),
       asset("images/project-emerge-2026-03.webp"),
       asset("images/project-emerge-2026-04.webp"),
@@ -81,7 +78,7 @@ const projects: any[] = [
     id: 8,
     title: "2025 美秀集團TOUR 視訊統籌",
     category: "Visual Media",
-    images: [] /* TODO: 補上 2025 美秀集團 TOUR 圖片 */,
+    images: [asset("images/project-misio-tour-2025.webp")],
     link: "https://www.facebook.com/share/p/18gHgD3PHp/",
     description: "2025.11-12月 @ 中國巡迴\n廣州/深圳/長沙/青島/杭州/南京/鄭州/廈門/上海/北京\n【 美秀集團《AS= =》TOUR 】\n視訊統籌、設計製作、現場執行",
     sortDate: 20251130,
@@ -209,7 +206,7 @@ export default function Project() {
                         onClick={() => handleProjectClick(project, i)}
                       >
                         <img
-                          src={project.images[0]}
+                          src={project.cover ?? project.images[0]}
                           alt={project.title}
                           className="w-full h-full object-cover motion-safe:transition-transform motion-safe:duration-500 motion-safe:group-hover:scale-105 image-fade-in"
                         />
@@ -325,12 +322,7 @@ export default function Project() {
               {selectedProject.images && selectedProject.images.length > 1 && (
                 <div className="mt-8 space-y-4">
                   {selectedProject.images.slice(1).map((image: string, idx: number) => {
-                    const imageTexts = selectedProject.id === 9 ? [
-                      "美秀集團Amazing Show",
-                      "麋先生 MIXER",
-                      "Dragon Pony",
-                      "滅火器FIRE EX."
-                    ] : [];
+                    const imageTexts: string[] = [];
                     return (
                       <div
                         key={idx}
