@@ -79,16 +79,16 @@ function todayTaipei() {
 
 function SectionTitle({ zh, en }: { zh: string; en: string }) {
   return (
-    <h2 className="border-b border-white/10 pb-5 text-2xl text-white">
-      <span className="font-semibold tracking-[0.1em]">{zh}</span>{" "}
-      <span className="whitespace-nowrap font-['ButlerCustom'] tracking-[0.1em]">{en}</span>
+    <h2 className="border-b border-white/10 pb-5 text-[30px] leading-tight text-white">
+      <span className="font-semibold tracking-[1px]">{zh}</span>{" "}
+      <span className="whitespace-nowrap font-['ButlerCustom'] tracking-[1px]">{en}</span>
     </h2>
   );
 }
 
 function GroupLabel({ children }: { children: React.ReactNode }) {
   return (
-    <h3 className="mb-1 font-['ButlerCustom'] text-xs uppercase tracking-[0.35em] text-[oklch(0.70_0.02_280)]">
+    <h3 className="mb-1 font-['ButlerCustom'] text-[10px] uppercase tracking-[1px] text-[oklch(0.70_0.02_280)]">
       {children}
     </h3>
   );
@@ -96,14 +96,14 @@ function GroupLabel({ children }: { children: React.ReactNode }) {
 
 function ShowRow({ show }: { show: Show }) {
   return (
-    <li className="grid grid-cols-1 gap-1 border-b border-white/10 py-5 sm:grid-cols-[160px_1fr] sm:gap-8 lg:grid-cols-[200px_1fr]">
-      <span className="font-['ButlerCustom'] text-sm tracking-[0.08em] text-white/50">
+    <li className="grid grid-cols-1 gap-1 border-b border-white/10 py-4 sm:grid-cols-[140px_1fr] sm:gap-8 lg:grid-cols-[160px_1fr]">
+      <span className="font-['ButlerCustom'] text-[12px] tracking-[1px] text-white/50">
         {show.date}
       </span>
       <div>
-        <p className="font-['ButlerCustom'] text-lg text-white">{show.place}</p>
+        <p className="font-['ButlerCustom'] text-[14px] tracking-[1px] text-white">{show.place}</p>
         {show.note && (
-          <p className="mt-1 font-['ButlerCustom'] text-xs tracking-[0.08em] text-white/40">
+          <p className="mt-1 font-['ButlerCustom'] text-[10px] tracking-[1px] text-white/40">
             {show.note}
           </p>
         )}
@@ -148,7 +148,7 @@ export default function Tour() {
                 ))}
               </ul>
             ) : (
-              <p className="mt-6 font-['ButlerCustom'] text-sm text-white/50">
+              <p className="mt-6 font-['ButlerCustom'] text-[12px] tracking-[1px] text-white/50">
                 目前沒有已公布的演出，追蹤 Bandsintown 搶先收到最新場次通知。
               </p>
             )}
@@ -156,10 +156,10 @@ export default function Tour() {
               href={BANDSINTOWN_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-6 inline-flex items-center gap-2 border border-white/30 px-5 py-2.5 font-['ButlerCustom'] text-xs tracking-[0.16em] text-white transition-colors duration-300 hover:border-white hover:bg-white hover:text-black"
+              className="mt-6 inline-flex items-center gap-2 border border-white/30 px-5 py-2.5 font-['ButlerCustom'] text-[10px] tracking-[1px] text-white transition-colors duration-300 hover:border-white hover:bg-white hover:text-black"
             >
               追蹤 Bandsintown
-              <ArrowUpRight className="h-3.5 w-3.5" />
+              <ArrowUpRight className="h-3 w-3" />
             </a>
           </section>
 
