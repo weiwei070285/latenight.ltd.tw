@@ -3,7 +3,7 @@
    ============================================================ */
 import { useState } from "react";
 import Layout from "@/components/Layout";
-import { Play, X } from "lucide-react";
+import { ArrowUpRight, Play, X, Youtube } from "lucide-react";
 
 /** YouTube thumbnail with fallback: maxres (HD) is missing on some videos,
  *  where YouTube returns a 120x90 gray placeholder — step down to sd, then hq (always exists). */
@@ -158,40 +158,23 @@ export default function Video() {
       <section className="page-section pt-6! lg:pt-8!">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
 
-          {/* Featured video */}
-          {filtered.length > 0 && (
-            <div className="mb-8 fade-in-up">
-              <div
-                className="relative aspect-video overflow-hidden cursor-pointer group"
-                onClick={() => setActiveVideo(filtered[0].id)}
-              >
-                <img
-                  src={filtered[0].thumb}
-                  {...thumbHandlers}
-                  alt={filtered[0].title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 image-fade-in"
-                />
-                <div className="absolute inset-0 bg-[oklch(0.10_0.005_285/0.5)] group-hover:bg-[oklch(0.10_0.005_285/0.4)] transition-colors duration-300" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full border-2 border-white/60 flex items-center justify-center group-hover:border-white group-hover:scale-110 transition-all duration-300">
-                    <Play className="w-6 h-6 text-white ml-1" fill="white" />
-                  </div>
-                </div>
-                <div className="absolute bottom-6 left-6">
-                  <span className="text-[oklch(0.70_0.02_280)] text-[0.6rem] tracking-[0.3em] font-['ButlerCustom'] mb-2 block">
-                    {filtered[0].type} · {filtered[0].year}
-                  </span>
-                  <h2 className="font-['ButlerCustom'] text-2xl lg:text-3xl text-white">
-                    {filtered[0].title}
-                  </h2>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Subscribe button */}
+          <div className="mb-10">
+            <a
+              href="https://www.youtube.com/@leightnine"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-scale inline-flex items-center gap-2 bg-[#ff0000] px-5 py-3 font-['ButlerCustom'] text-xs tracking-[0.16em] text-white transition-colors duration-300 hover:bg-white hover:text-black"
+            >
+              <Youtube className="h-4 w-4" aria-hidden="true" />
+              SUBSCRIBE ON YOUTUBE
+              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </a>
+          </div>
 
           {/* Video grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filtered.slice(1).map((video, i) => (
+            {filtered.map((video, i) => (
               <div
                 key={i}
                 className="group cursor-pointer fade-in-up"

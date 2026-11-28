@@ -103,7 +103,7 @@ export default function Discography() {
       <section className="relative pt-32 pb-6 lg:pt-40 lg:pb-8 overflow-hidden bg-black">
         <div className="absolute inset-0 bg-black" />
         <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10">
-          <p className="text-[oklch(0.70_0.02_280)] text-xs tracking-[0.4em] font-['ButlerCustom'] mb-4">
+          <p className="text-[#ff0000] text-xs tracking-[0.4em] font-['ButlerCustom'] mb-4">
             LEIGHT NINE
           </p>
 

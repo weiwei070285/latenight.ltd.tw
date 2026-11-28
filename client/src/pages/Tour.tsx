@@ -271,7 +271,7 @@ export default function Tour() {
       <section className="relative overflow-hidden bg-black px-6 pb-6 pt-32 lg:px-10 lg:pb-8 lg:pt-40">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,oklch(0.70_0.02_280/0.14),transparent_38%)]" />
         <div className="relative z-10 mx-auto max-w-[1400px]">
-          <p className="mb-4 font-['ButlerCustom'] text-xs tracking-[0.4em] text-[oklch(0.70_0.02_280)]">
+          <p className="mb-4 font-['ButlerCustom'] text-xs tracking-[0.4em] text-[#ff0000]">
             LEIGHT NINE
           </p>
           <div className="mt-6 h-px w-16 bg-[oklch(0.70_0.02_280)]" />
