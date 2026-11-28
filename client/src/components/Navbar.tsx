@@ -52,21 +52,8 @@ export default function Navbar() {
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
         <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Social icons — left (desktop) */}
-          <div className="hidden lg:flex items-center gap-0.5">
-            {socialLinks.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={s.label}
-                className="social-icon"
-              >
-                {s.icon}
-              </a>
-            ))}
-          </div>
+          {/* 左側留空（社群圖示已移到頁尾），讓購物車維持在右邊 */}
+          <div className="hidden lg:block w-10" aria-hidden="true" />
 
           {/* Logo — center */}
           <Link href="/" className="absolute left-1/2 -translate-x-1/2 flex flex-col items-center leading-none group">
