@@ -8,6 +8,7 @@ import { Link, useLocation } from "wouter";
 import { Menu, X, ShoppingCart } from "lucide-react";
 import { requestCheckoutScroll, useCartCount } from "@/lib/cartStore";
 import { socialLinks } from "@/lib/socialLinks";
+import NewsTicker from "@/components/NewsTicker";
 
 const navItems = [
   { label: "HOME", href: "/" },
@@ -118,6 +119,9 @@ export default function Navbar() {
           ))}
         </nav>
       </div>
+
+      {/* 首頁：最新消息跑馬燈 */}
+      {location === "/" && !mobileOpen && <NewsTicker />}
 
       {/* Mobile nav overlay */}
       {mobileOpen && (
