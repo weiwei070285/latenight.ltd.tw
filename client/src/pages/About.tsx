@@ -8,7 +8,7 @@ export default function About() {
   return (
     <Layout>
       {/* Page Header */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden bg-black">
+      <section className="relative pt-32 pb-6 lg:pt-40 lg:pb-8 overflow-hidden bg-black">
         <div className="absolute inset-0 bg-black" />
         <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-10">
           <p className="text-white/40 text-xs tracking-[0.4em] font-['ButlerCustom'] mb-4">
@@ -19,7 +19,7 @@ export default function About() {
       </section>
 
       {/* Company Intro */}
-      <section className="page-section">
+      <section className="page-section pt-6! lg:pt-8!">
         <div className="max-w-[1400px] mx-auto px-6 lg:px-10">
           <div className="max-w-3xl mx-auto">
             <div className="fade-in-up">

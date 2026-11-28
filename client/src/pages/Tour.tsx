@@ -268,7 +268,7 @@ export default function Tour() {
 
   return (
     <Layout>
-      <section className="relative overflow-hidden bg-black px-6 pb-20 pt-32 lg:px-10 lg:pb-28 lg:pt-40">
+      <section className="relative overflow-hidden bg-black px-6 pb-6 pt-32 lg:px-10 lg:pb-8 lg:pt-40">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_18%,oklch(0.70_0.02_280/0.14),transparent_38%)]" />
         <div className="relative z-10 mx-auto max-w-[1400px]">
           <p className="mb-4 font-['ButlerCustom'] text-xs tracking-[0.4em] text-[oklch(0.70_0.02_280)]">
@@ -278,7 +278,7 @@ export default function Tour() {
         </div>
       </section>
 
-      <section className="page-section">
+      <section className="page-section pt-6! lg:pt-8!">
         <div className="mx-auto max-w-[1400px] space-y-20 px-6 lg:px-10">
           {/* 即將演出 Upcoming */}
           <section>
