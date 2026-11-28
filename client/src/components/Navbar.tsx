@@ -6,6 +6,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X, ShoppingCart } from "lucide-react";
+import { requestCheckoutScroll, useCartCount } from "@/lib/cartStore";
 import { socialLinks } from "@/lib/socialLinks";
 
 const navItems = [
@@ -22,6 +23,7 @@ const navItems = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const cartCount = useCartCount();
   const [location] = useLocation();
 
   useEffect(() => {
@@ -77,8 +79,21 @@ export default function Navbar() {
 
           {/* Cart + mobile menu — right */}
           <div className="flex items-center gap-3">
-            <Link href="/shop" className="social-icon hidden lg:flex" aria-label="Shop">
+            <Link
+              href="/shop"
+              onClick={() => { if (cartCount > 0) requestCheckoutScroll(); }}
+              className={`social-icon relative ${cartCount > 0 ? "flex" : "hidden lg:flex"}`}
+              aria-label={cartCount > 0 ? `購物車 ${cartCount} 件，前往結帳` : "Shop"}
+            >
               <ShoppingCart className="w-4 h-4" />
+              {cartCount > 0 && (
+                <span
+                  key={cartCount /* 數字改變時重新播放跳動動畫 */}
+                  className="cart-badge-bump absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#ff0000] px-1 text-[10px] font-semibold leading-none text-white"
+                >
+                  {cartCount > 99 ? "99+" : cartCount}
+                </span>
+              )}
             </Link>
             <button
               className="lg:hidden social-icon"
