@@ -7,10 +7,11 @@
    Set ORDER_ENDPOINT to the Apps Script /exec URL. While it is empty
    the page runs in preview mode and only simulates a successful order.
    ============================================================ */
-import { FormEvent, ReactNode, useMemo, useState } from "react";
-import { ArrowUpRight, CheckCircle2, Loader2, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { FormEvent, ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { ArrowUpRight, Check, CheckCircle2, Loader2, Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
 import Layout from "@/components/Layout";
 import { asset } from "@/lib/asset";
+import { onCheckoutRequest, useCart } from "@/lib/cartStore";
 
 const CASSETTE_IMAGE = asset("images/shop-cassette-naihe.webp");
 const CASE_IMAGE = asset("images/shop-logo-case.webp");
@@ -85,7 +86,6 @@ function ProductImage({ src, alt, className }: { src: string | null; alt: string
   );
 }
 
-type Cart = Record<number, number>;
 
 type CustomerInfo = {
   name: string;
@@ -114,7 +114,7 @@ const createOrderNumber = () => {
 const formatCurrency = (amount: number) => `NT$${amount.toLocaleString("en-US")}`;
 
 export default function Shop() {
-  const [cart, setCart] = useState<Cart>({});
+  const [cart, setCart] = useCart(); // 和右上角購物車圖示共用，換頁也會保留
   const [customer, setCustomer] = useState<CustomerInfo>(emptyCustomer);
   const [submittedOrder, setSubmittedOrder] = useState<{ number: string; total: number; email: string } | null>(null);
   const [isConfirming, setIsConfirming] = useState(false);
@@ -151,10 +151,57 @@ export default function Shop() {
     });
   };
 
+  // ---- 加入購物車的回饋：提示小視窗、按鈕「已加入」、浮動購物車列 ----
+  const [toastProductId, setToastProductId] = useState<number | null>(null);
+  const [justAddedId, setJustAddedId] = useState<number | null>(null);
+  const [checkoutInView, setCheckoutInView] = useState(false);
+  const toastTimer = useRef<number | undefined>(undefined);
+  const justAddedTimer = useRef<number | undefined>(undefined);
+  const checkoutRef = useRef<HTMLDivElement>(null);
+  const cartBoxRef = useRef<HTMLDivElement>(null);
+  const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  useEffect(() => {
+    // 只有「購物車清單」本身出現在畫面上時，才隱藏浮動購物車列
+    const el = cartBoxRef.current;
+    if (!el || !("IntersectionObserver" in window)) return;
+    const io = new IntersectionObserver(([entry]) => setCheckoutInView(entry.isIntersecting), { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // 從右上角購物車圖示點進來時，直接捲到結帳區
+  useEffect(
+    () =>
+      onCheckoutRequest(() => {
+        setToastProductId(null);
+        window.setTimeout(() => checkoutRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
+      }),
+    [],
+  );
+
+  useEffect(() => () => {
+    window.clearTimeout(toastTimer.current);
+    window.clearTimeout(justAddedTimer.current);
+  }, []);
+
+  const goToCheckout = () => {
+    setToastProductId(null);
+    checkoutRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   const addToCart = (productId: number) => {
     updateQuantity(productId, (cart[productId] ?? 0) + 1);
     setSubmittedOrder(null);
     setIsConfirming(false);
+
+    setToastProductId(productId);
+    window.clearTimeout(toastTimer.current);
+    toastTimer.current = window.setTimeout(() => setToastProductId(null), 4500);
+
+    setJustAddedId(productId);
+    window.clearTimeout(justAddedTimer.current);
+    justAddedTimer.current = window.setTimeout(() => setJustAddedId(null), 1400);
   };
 
   const handleCustomerChange = (field: keyof CustomerInfo, value: string) => {
@@ -272,17 +319,33 @@ export default function Shop() {
                   <span className="font-['ButlerCustom'] text-xs tracking-[0.2em] text-[#ff0000]">Price</span>
                   <span className="font-['ButlerCustom'] text-xs tracking-[0.2em] text-[#ff0000]">{formatCurrency(product.price)}</span>
                 </div>
-                <button type="button" onClick={() => addToCart(product.id)} className="btn-scale mt-5 inline-flex items-center gap-2 bg-white px-5 py-3 font-['ButlerCustom'] text-xs tracking-[0.16em] text-black transition-colors hover:bg-[#ff0000] hover:text-white">
-                  <ShoppingBag className="h-4 w-4" aria-hidden="true" />
-                  Add to cart
-                </button>
+                <div className="mt-5 flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => addToCart(product.id)}
+                    className={`btn-scale inline-flex min-w-[150px] items-center justify-center gap-2 px-5 py-3 font-['ButlerCustom'] text-xs tracking-[0.16em] transition-colors ${
+                      justAddedId === product.id ? "bg-[#ff0000] text-white" : "bg-white text-black hover:bg-[#ff0000] hover:text-white"
+                    }`}
+                  >
+                    {justAddedId === product.id ? (
+                      <><Check className="h-4 w-4" aria-hidden="true" />已加入</>
+                    ) : (
+                      <><ShoppingBag className="h-4 w-4" aria-hidden="true" />Add to cart</>
+                    )}
+                  </button>
+                  {cart[product.id] ? (
+                    <button type="button" onClick={goToCheckout} className="font-['ButlerCustom'] text-xs tracking-[0.12em] text-white/60 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white">
+                      購物車內 ×{cart[product.id]}
+                    </button>
+                  ) : null}
+                </div>
               </article>
             ))}
           </div>
 
           <div className="my-16 h-px bg-gradient-to-r from-transparent via-[oklch(1_0_0/20%)] to-transparent" />
 
-          <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] lg:gap-16">
+          <div id="checkout" ref={checkoutRef} className="scroll-mt-24 grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(360px,520px)] lg:gap-16">
             <div>
               <div className="mb-8">
                 <p className="mb-4 font-['ButlerCustom'] text-xs tracking-[0.4em] text-[oklch(0.70_0.02_280)]">ORDER FORM</p>
@@ -293,7 +356,7 @@ export default function Shop() {
                 </div>
               </div>
 
-              <div className="overflow-hidden rounded-lg border border-[oklch(1_0_0/10%)] bg-[oklch(0.12_0.005_285)]">
+              <div ref={cartBoxRef} className="overflow-hidden rounded-lg border border-[oklch(1_0_0/10%)] bg-[oklch(0.12_0.005_285)]">
                 <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">
                   <h3 className="font-['ButlerCustom'] text-xl text-white">Shopping cart</h3>
                   <span className="text-xs tracking-[0.12em] text-white/45">{cartItems.reduce((sum, item) => sum + item.quantity, 0)} ITEMS</span>
@@ -406,6 +469,69 @@ export default function Shop() {
           </div>
         </div>
       </section>
+
+      {/* 加入購物車提示小視窗 */}
+      {toastProductId !== null && (() => {
+        const p = products.find((x) => x.id === toastProductId);
+        if (!p) return null;
+        return (
+          <div
+            role="status"
+            aria-live="polite"
+            className="fixed inset-x-3 bottom-3 z-50 rounded-lg border border-white/15 bg-[oklch(0.14_0.006_285/0.96)] p-4 shadow-2xl backdrop-blur-md sm:inset-x-auto sm:bottom-6 sm:right-6 sm:w-[360px] animate-in fade-in slide-in-from-bottom-4 duration-300"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <p className="flex items-center gap-2 font-['ButlerCustom'] text-xs tracking-[0.16em] text-white">
+                <CheckCircle2 className="h-4 w-4 text-[oklch(0.88_0.14_88)]" aria-hidden="true" />
+                已加入購物車
+              </p>
+              <button type="button" onClick={() => setToastProductId(null)} className="text-white/40 transition-colors hover:text-white" aria-label="關閉">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="mt-3 flex items-center gap-3">
+              <ProductImage src={p.image} alt={p.name} className="h-14 w-14 shrink-0 object-cover" />
+              <div className="min-w-0">
+                <p className="truncate font-['ButlerCustom'] text-sm text-white">{p.name}</p>
+                <p className="mt-0.5 text-xs text-white/50">{formatCurrency(p.price)} · 購物車內 ×{cart[p.id] ?? 0}</p>
+              </div>
+            </div>
+            <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3 text-xs text-white/60">
+              <span>購物車共 {itemCount} 件</span>
+              <span>商品小計 <span className="font-['ButlerCustom'] text-sm text-white">{formatCurrency(subtotal)}</span></span>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <button type="button" onClick={() => setToastProductId(null)} className="border border-white/20 py-2.5 font-['ButlerCustom'] text-xs tracking-[0.12em] text-white transition-colors hover:border-white">
+                繼續選購
+              </button>
+              <button type="button" onClick={goToCheckout} className="bg-white py-2.5 font-['ButlerCustom'] text-xs tracking-[0.12em] text-black transition-colors hover:bg-[#ff0000] hover:text-white">
+                前往結帳
+              </button>
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* 浮動購物車列：購物車有東西、且結帳區不在畫面上時顯示 */}
+      {itemCount > 0 && !checkoutInView && toastProductId === null && !submittedOrder && (
+        <button
+          type="button"
+          onClick={goToCheckout}
+          className="fixed inset-x-3 bottom-3 z-40 flex items-center justify-between gap-4 rounded-lg border border-white/15 bg-[oklch(0.14_0.006_285/0.96)] px-5 py-3.5 text-left shadow-2xl backdrop-blur-md transition-colors hover:border-white/40 sm:inset-x-auto sm:bottom-6 sm:right-6 sm:min-w-[320px] animate-in fade-in slide-in-from-bottom-4 duration-300"
+          aria-label={`購物車 ${itemCount} 件，商品小計 ${formatCurrency(subtotal)}，前往結帳`}
+        >
+          <span className="flex items-center gap-3">
+            <span className="relative">
+              <ShoppingBag className="h-5 w-5 text-white" aria-hidden="true" />
+              <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#ff0000] px-1 text-[10px] font-semibold text-white">{itemCount}</span>
+            </span>
+            <span className="font-['ButlerCustom'] text-sm text-white">{formatCurrency(subtotal)}</span>
+          </span>
+          <span className="inline-flex items-center gap-1 font-['ButlerCustom'] text-xs tracking-[0.12em] text-white/80">
+            前往結帳 <ArrowUpRight className="h-3.5 w-3.5 rotate-90" aria-hidden="true" />
+          </span>
+        </button>
+      )}
     </Layout>
   );
 }
